@@ -49,7 +49,7 @@ BEGIN
             v_error := TRUE;
         ELSE
             DBMS_OUTPUT.PUT_LINE('Employee details retrieved for PESEL: ' || v_pesel || ' Imie: '|| v_imie|| ' Nazwisko: '|| v_nazwisko || ' Wykształcenie: ' || v_wyksztalcenie || ' Stanowisko: ' || v_stanowisko );
-            -- Możesz wykonać inne operacje dla danego pracownika
+            
         END IF;
 
         IF v_error THEN
@@ -66,8 +66,8 @@ END;
 
 -- PROCEDURE EXEC
 DECLARE
-    v_emp_data employee_info; -- Deklarujesz zmienną dla wyniku procedury
+    v_emp_data employee_info; 
 BEGIN
     GetEmployeeDetailsForAllEmployees(employee_data => v_emp_data);
-    -- Możesz wykonać działania na wyniku, ale wymaga to poprawnie zdefiniowanego typu 'employee_info'
+    
 END;
