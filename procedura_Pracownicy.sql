@@ -1,3 +1,10 @@
+/*
+    Procedura wyswietlajaca podstawowe atrybuty z tabeli Pracownicy, sprawdza czy nazwisko, imie, wyksztalcenie NIE jest puste,
+    sprawdza czy atrybut Email zawiera znak '@', sprawdza czy atrybut stanowisko z innej tabeli NIE jest puste
+    
+    ZASTANOWIC SIE CZY COS JESZCZE TUTAJ MOZNA DOROBIC
+*/
+
 -- CREATING OBJECT FOR USE IN PROCEDURE
 CREATE TYPE employee_info AS OBJECT (
     PESEL VARCHAR(11),
@@ -44,8 +51,8 @@ BEGIN
         ELSIF INSTR(v_email, '@') = 0 THEN
             DBMS_OUTPUT.PUT_LINE('Error: Email for employee ' || v_pesel || ' does not contain "@".');
             v_error := TRUE;
-        ELSIF v_wyksztalcenie IS NULL THEN
-            DBMS_OUTPUT.PUT_LINE('Error: Wyksztalcenie is empty for employee ' || v_pesel);
+        ELSIF v_stanowisko IS NULL THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Stanowisko is empty for employee ' || v_pesel);
             v_error := TRUE;
         ELSE
             DBMS_OUTPUT.PUT_LINE('Employee details retrieved for PESEL: ' || v_pesel || ' Imie: '|| v_imie|| ' Nazwisko: '|| v_nazwisko || ' Wykształcenie: ' || v_wyksztalcenie || ' Stanowisko: ' || v_stanowisko );
