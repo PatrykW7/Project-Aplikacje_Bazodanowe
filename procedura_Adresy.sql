@@ -32,6 +32,9 @@ BEGIN
     	ELSIF NOT REGEXP_LIKE(v_kod_pocztowy, '^\d{2}-\d{3}$') THEN
     		DBMS_OUTPUT.PUT_LINE('Error: Your kod_pocztowy has wrong format, for address_id: ' || v_id_kod_adresu);
     		v_error := TRUE;
+
+		ELSE 
+            DBMS_OUTPUT.PUT_LINE('Addres: ' || v_id_kod_adresu || 'Kod pocztowy: ' || v_kod_pocztowy || 'Ulica: ' || v_ulica || 'Nr domu lokalu: ' || v_Nr_domu_lokalu);
     
     	END IF;
     
@@ -46,6 +49,7 @@ EXCEPTION
 	WHEN OTHERS THEN
 		DBMS_OUTPUT.PUT_LINE('An error occured ' || SQLERRM);
 END;
+
 
 
 DECLARE
