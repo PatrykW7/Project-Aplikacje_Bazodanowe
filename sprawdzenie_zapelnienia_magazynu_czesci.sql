@@ -12,7 +12,7 @@ CREATE OR REPLACE PROCEDURE CheckStorageFullnes(
     v_czesc_id Magazyn_czesci.CZESC_ID%TYPE;
     v_ilosc_w_magazynie Magazyn_czesci.ILOSC_W_MAGAZYNIE%TYPE;
     v_max_pojemnosc Magazyn_czesci.MAX_POJEMNOSC%TYPE;
-    v_fullness_percent := v_ilosc_w_magazynie/v_max_pojemnosc*100;
+    v_fullness_percent NUMBER;
     CURSOR magazyn_cursor IS
         SELECT * FROM Magazyn_Czesci;
 BEGIN
@@ -21,13 +21,14 @@ BEGIN
         v_czesc_id  := magazyn_record.CZESC_ID;
         v_ilosc_w_magazynie := magazyn_record.ILOSC_W_MAGAZYNIE;
         v_max_pojemnosc := magazyn_record.MAX_POJEMNOSC;
+        v_fullness_percent := v_ilosc_w_magazynie/v_max_pojemnosc*100;
         IF v_czesc_id IS NULL THEN
             DBMS_OUTPUT.PUT_LINE('ERROR: Parts are empty for location ' || v_lokacja_id);
             v_error := TRUE;
         ELSIF v_ilosc_w_magazynie > v_max_pojemnosc/2 THEN
-            DBMS_OUTPUT.PUT_LINE('Location ' || v_lokacja_id || ' has ' || v_fullnes_percent || '% of capacity of part ' || v_czesc_id);
+            DBMS_OUTPUT.PUT_LINE('Location ' || v_lokacja_id || ' has ' || ROUND(v_fullness_percent,2) || '% of capacity of part ' || v_czesc_id);
         ELSE
-            DBMS_OUTPUT.PUT_LINE('Not enough part ' || v_czesc_id || 'in location ' || v_lokacja_id || '. ' || v_fullnes_percent || '% of capacity is not enough for production');
+            DBMS_OUTPUT.PUT_LINE('Not enough part ' || v_czesc_id || ' in location ' || v_lokacja_id || '. ' || ROUND(v_fullness_percent,2) || '% of capacity is not enough for production');
         END IF;
         IF v_error THEN
             RAISE_APPLICATION_ERROR(-2001, 'Validation failed');
