@@ -9,9 +9,9 @@ CREATE TYPE client_info AS OBJECT (
 );
 
 
-CREATE OR REPLACE PROCEDURE InsertClientDetails(
+CREATE OR REPLACE FUNCTION InsertClientDetails(
     p_client_data IN client_info
-) AS
+) RETURN BOOLEAN AS
     v_error BOOLEAN := FALSE;
 BEGIN 
     IF p_client_data.Nazwa_klienta IS NULL OR p_client_data.Nazwa_klienta = '' THEN
@@ -33,23 +33,39 @@ BEGIN
     IF v_error THEN
         RAISE_APPLICATION_ERROR(-20001, 'Validation failed');
     END IF;
+
+    RETURN NOT v_error; -- Zwracamy TRUE, jeśli operacja przebiegła pomyślnie, FALSE w przeciwnym razie
 EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
         ROLLBACK;
+        RETURN FALSE; -- Zwracamy FALSE w przypadku wystąpienia błędu
 END;
 
 
 DECLARE
-    v_client_data client_info := client_info(
-        Klient_ID => 16,
-        Nazwa_klienta => 'Wilkumka',
-        Miejscowosc => 'BrzyskaUola',
-        Email => 'romanisko@wp.pl',
-        Telefon => '6942069420',
-        Typ_klienta => 'Boss',
-        id_kod_adresu => 16
-    );
+    client_data client_info; -- Przykładowe dane klienta, dostosuj do swoich potrzeb
+    success BOOLEAN;
 BEGIN
-    InsertClientDetails(p_client_data => v_client_data);
+    -- Inicjalizacja danych klienta
+    client_data := client_info(
+        Klient_ID => 69,
+        Nazwa_klienta => 'Przykładowa Firma',
+        Miejscowosc => 'Warszawa',
+        Email => 'przykladowa@firma.com',
+        Telefon => '123456789',
+        Typ_klienta => 'normalny',
+        id_kod_adresu => '14'
+    );
+
+    -- Wywołanie funkcji
+    success := InsertClientDetails(client_data);
+
+    -- Sprawdzenie rezultatu
+    IF success THEN
+        DBMS_OUTPUT.PUT_LINE('Operacja zakończona pomyślnie.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Operacja zakończona niepowodzeniem.');
+    END IF;
 END;
+/
