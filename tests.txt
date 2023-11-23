@@ -1,0 +1,135 @@
+
+-------------------------- OLD VERSION--------------------------
+"""
+CREATE OR REPLACE FUNCTION GetClientDetails RETURN client_info AS
+    v_client_data client_info := client_info(NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    v_error BOOLEAN := FALSE;
+    emp_cursor SYS_REFCURSOR;
+
+BEGIN 
+    OPEN emp_cursor FOR 
+        SELECT Klient_ID, Nazwa_klienta, Miejscowosc, Email, Telefon, Typ_klienta, id_kod_adresu FROM Klienci;
+
+    LOOP
+        FETCH emp_cursor INTO v_client_data.Klient_ID, v_client_data.Nazwa_klienta, v_client_data.Miejscowosc,
+                               v_client_data.Email, v_client_data.Telefon, v_client_data.Typ_klienta, v_client_data.id_kod_adresu;
+        EXIT WHEN emp_cursor%NOTFOUND;
+
+        IF v_client_data.Nazwa_klienta IS NULL THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Client Name NOT FOUND OR ID ' || v_client_data.Klient_ID);
+            v_error := TRUE;
+        ELSIF INSTR(v_client_data.Email, '@') = 0 THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Email address for Client ID: ' || v_client_data.Klient_ID || ' is empty');
+            v_error := TRUE;
+        ELSIF LENGTH(v_client_data.Telefon) NOT BETWEEN 9 AND 11 THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Phone number is wrong for Client ID ' || v_client_data.Klient_ID);
+            v_error := TRUE;
+        ELSIF v_client_data.id_kod_adresu IS NULL THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Client doesnt have address: ' || v_client_data.Klient_ID);
+            v_error := TRUE;
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Client details retrieved for Client ID: ' || v_client_data.Klient_ID ||
+                                  ' Nazwa: '|| v_client_data.Nazwa_klienta || ' Email: ' || v_client_data.Email ||
+                                  ' Telefon: ' || v_client_data.Telefon);
+        END IF;
+
+        IF v_error THEN
+            RAISE_APPLICATION_ERROR(-2001, 'Validation failed');
+        END IF;
+    END LOOP;
+
+    CLOSE emp_cursor;
+    RETURN v_client_data;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Client Data Not Found');
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+        IF emp_cursor%ISOPEN THEN
+            CLOSE emp_cursor;
+        END IF;
+        RETURN NULL; -- or handle the exception accordingly
+END;
+
+
+DECLARE
+    v_client_data client_info;
+BEGIN
+    v_client_data := GetClientDetails();
+    -- You can use the returned data here or display it using DBMS_OUTPUT.PUT_LINE
+    DBMS_OUTPUT.PUT_LINE('Client ID: ' || v_client_data.Klient_ID || ', Nazwa Klienta: ' || v_client_data.Nazwa_klienta);
+END;
+"""
+
+
+
+
+
+
+-------------------------- OLD VERSION--------------------------
+"""
+CREATE OR REPLACE FUNCTION GetEmployeeDetailsForAllEmployees
+RETURN BOOLEAN
+AS
+    v_error BOOLEAN := FALSE;
+    v_pesel Pracownicy.PESEL%TYPE;
+    v_imie Pracownicy.Imie%TYPE;
+    v_nazwisko Pracownicy.Nazwisko%TYPE;
+    v_email Pracownicy.Email%TYPE;
+    v_telefon Pracownicy.Telefon%TYPE;
+    v_wyksztalcenie Pracownicy.Wyksztalcenie%TYPE;
+    v_stanowisko Zatrudnienie.Nazwa_stanowiska%TYPE;
+    CURSOR emp_cursor IS
+        SELECT PESEL, Imie, Nazwisko, Email, Telefon, Wyksztalcenie, Nazwa_stanowiska
+        FROM Pracownicy INNER JOIN Zatrudnienie ON Zatrudnienie.id_zatrudnienia = Pracownicy.id_zatrudnienia;
+BEGIN
+    FOR emp_rec IN emp_cursor LOOP
+        v_pesel := emp_rec.PESEL;
+        v_imie := emp_rec.Imie;
+        v_nazwisko := emp_rec.Nazwisko;
+        v_email := emp_rec.Email;
+        v_telefon := emp_rec.Telefon;
+        v_wyksztalcenie := emp_rec.Wyksztalcenie;
+        v_stanowisko := emp_rec.Nazwa_stanowiska;
+
+        IF v_nazwisko IS NULL OR v_imie IS NULL THEN
+            DBMS_OUTPUT.PUT_LINE('ERROR: First name or last name is empty for employee ID ' || v_pesel);
+            v_error := TRUE;
+        ELSIF INSTR(v_email, '@') = 0 THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Email for employee ' || v_pesel || ' does not contain "@".');
+            v_error := TRUE;
+        ELSIF v_stanowisko IS NULL THEN
+            DBMS_OUTPUT.PUT_LINE('Error: Stanowisko is empty for employee ' || v_pesel);
+            v_error := TRUE;
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Employee details retrieved for PESEL: ' || v_pesel || ' Imie: '|| v_imie|| ' Nazwisko: '|| v_nazwisko || ' Wykształcenie: ' || v_wyksztalcenie || ' Stanowisko: ' || v_stanowisko );
+        END IF;
+
+        IF v_error THEN
+            RETURN FALSE;
+        END IF;
+    END LOOP;
+
+    RETURN TRUE;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('Employee data not found.');
+        RETURN FALSE;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+        RETURN FALSE;
+END;
+
+
+
+DECLARE
+    v_success BOOLEAN;
+BEGIN
+    v_success := GetEmployeeDetailsForAllEmployees;
+    IF v_success THEN
+        DBMS_OUTPUT.PUT_LINE('Operation completed successfully');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Operation failed');
+    END IF;
+END;
+"""
