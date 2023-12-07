@@ -14,7 +14,7 @@ BEGIN
       WHERE pc.Produkt_ID = prod.Produkt_ID
       GROUP BY pc.Czesc_ID, c.Nazwa_czesci
     ) LOOP
-      v_output := v_output || 'Część: ' || part.Nazwa_czesci || ', Część ID: ' || part.Czesc_ID || ', Minimalne dzielenie: ' || part.minimalne_dzielenie || CHR(10);
+      v_output := v_output || 'Część: ' || part.Nazwa_czesci || ', Część ID: ' || part.Czesc_ID || ', Liczba produktow do wyprodukowania z czesci: ' || part.minimalne_dzielenie || CHR(10);
     END LOOP;
   END LOOP;
 
