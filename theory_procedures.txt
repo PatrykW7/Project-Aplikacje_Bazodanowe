@@ -1,0 +1,21 @@
+PROCEDURY:
+
+	Sprawdzenie Pracownikow:
+		- sprawdza czy email zawiera znak @ 
+		- sprawdza czy telefon i wykształcenie nie jest puste	
+
+	Sprawdzanie Szczegoly_Zamowien:
+		- sprawdza czy kwota jest wieksza od 0 
+		
+	
+	Sprawdzenie Klienci:
+		- sprawdza czy nazwa klienta, miejscowosc nie jest pusta
+		- sprawdza czy email zawiera @
+		- sprawdza czy telefon ma 9 lub 11 znakow
+
+	Sprawdzenie Adresy ???:
+		- sprawdza czy kod_pocztowy zawiera format kodu pocztowego
+		- sprawdza czy adres nie jest pusty
+
+	Sprawdzenie Magazyn_produktow:
+		- sprawdzenie jakie jest % zapelnienie jest danych produktow
