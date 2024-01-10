@@ -1,9 +1,6 @@
 /*
-napisz  funkcje, ktora dla wprowadzonego ID produktu i ilosci sztuk, napisze ile 
-danych części jest potrzebne do zrealizowania tego zamówienia, tak aby pomnożyć kazdą w
-ymaganą_ilosc_czesci przez ilosc sztuk dla danego produktu.Niech funkcja zwraca ID_produktu 
-i ilość potrzebnych części dla wprowadzonej nazwy produktu. Tabela produkt_czesci przechowuje 
-z jakich części składają się produkty
+Funkcja przyjmujaca jako parametr nazwe asortymentu i jego ilosc, wyswietla ile danej czesci jest 
+potrzebne do zbudowania danego asortymentu
 
 
 
