@@ -3,12 +3,9 @@
 Sprawdza ile czesci potrzeba na dana ilosc asortymentu i sprawdza czy jest tyle czesci w magazynie, a jesli tak to
 usuwa dana ilosc czesci i aktualizuje wartosc ilosc_w_magazynie dla Magazyn_produktow dla danego Produkt_ID
 
-
+Zawiera pomocnicza procedure
 
 */
-
-
-
 
 CREATE OR REPLACE PROCEDURE AktualizujIloscWMagazynie (
     p_Produkt_ID Magazyn_produktow.Produkt_ID%TYPE,
