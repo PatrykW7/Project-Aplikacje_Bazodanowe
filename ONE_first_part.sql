@@ -1,7 +1,7 @@
 
 /*
 Sprawdzany jest stan produków, ile jest na magazynie tego co chce kupic klient, 
-jeśli tego nie ma to sprawdzamy ile produktów brakuje do spełnienia zamówienia, i dodajemy rekord do tabeli Brakujace_Produkty
+jeśli tego nie ma to sprawdzamy ile produktów brakuje do spełnienia zamówienia i wyswietlamy ta informacje
 */
 
 CREATE OR REPLACE TYPE BrakujacyProdukt AS OBJECT (
